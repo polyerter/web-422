@@ -4,24 +4,45 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+
+    <style>
+        .completed {
+            text-decoration: line-through;
+            color: #888;
+        }
+
+        .delete-btn {
+            margin-left: 10px;
+            color: red;
+            cursor: pointer;
+        }
+
+        li {
+            margin: 5px 0;
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body>
 
-    <form>
+    <!-- <form> -->
         <label for="name">Название пиццы</label> <br/>
         <input 
             type="text" 
             placeholder="название пиццы" 
             id="name"> <br/>
 
-        <button id="add" onclick="add()" type="button">Добавить</button>
-    </form>
+        <button id="add" type="button">Добавить</button>
+    <!-- </form> -->
 
     <div>
         <p>Заказы</p>
 
         <ul id="orders">
-            <li>Три сезона <input type="checkbox"></li>
+            <!-- <li>
+                <span>Три сезона</span> 
+                <button type="button" class="delete-btn"></button>
+            </li> -->
             <!-- li*20>lorem -->
         </ul>
     </div>
@@ -29,12 +50,41 @@
     <script>
         // console.log('Hello');
 
+        let taskList = document.getElementById('orders');
         let nameInput = document.getElementById('name');
+        let addBtn = document.getElementById('add');
+
+        addBtn.addEventListener('click', add);
 
         function add() {
-            // console.log(nameInput.value)
+            const orderName = nameInput.value.trim();
+
+            if (orderName == '') return;
+
+            const li = document.createElement('li');
+            li.innerHTML = `
+                <span>${orderName}</span> 
+                <button type="button" class="delete-btn">X</button>
+            `;
+
+            li.querySelector('span').addEventListener('click', function() {
+                this.classList.toggle('completed');
+            });
+            
+            li.querySelector('.delete-btn').addEventListener('click', function() {
+                li.remove();
+            });
+
+            taskList.appendChild(li);
+            nameInput.value = '';
+
+            console.log()
         }
 
+        nameInput.addEventListener('keypress', (e) => {
+            if (e.key == 'Enter') add() 
+        })
     </script>
+
 </body>
 </html>
